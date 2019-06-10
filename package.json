@@ -1,0 +1,61 @@
+{
+  "name": "jest-react-hooks-mock",
+  "version": "1.0.0",
+  "description": "Finally a simple solution to mock react hooks state",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "node_modules/jest-cli/bin/jest.js __tests__",
+    "lint": "node_modules/eslint/bin/eslint.js ./src",
+    "clean": "rm -rf ./lib",
+    "build:js": "node_modules/typescript/bin/tsc",
+    "build:compress": "node_modules/uglify-js/bin/uglifyjs -c -m -o ./lib/index.js -- ./lib/index.js",
+    "build": "npm run clean && npm run build:js && npm run build:compress",
+    "prepublish": "npm run build"
+  },
+  "files": [
+    "lib"
+  ],
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/victor95pc/jest-react-hooks-mock.git"
+  },
+  "keywords": [
+    "javascript",
+    "jest",
+    "testing",
+    "test utils",
+    "react",
+    "reactjs",
+    "react hooks",
+    "hooks",
+    "mock",
+    "state"
+  ],
+  "peerDependencies": {
+    "jest": ">=22.0.0",
+    "react": ">=16.8.0"
+  },
+  "author": "Victor Palomo de Castro",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/victor95pc/jest-react-hooks-mock/issues"
+  },
+  "homepage": "https://github.com/victor95pc/jest-react-hooks-mock#readme",
+  "devDependencies": {
+    "@types/react": "^16.8.19",
+    "@typescript-eslint/eslint-plugin": "^1.10.1",
+    "@typescript-eslint/parser": "^1.10.1",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^24.8.0",
+    "prettier": "^1.18.2",
+    "react": ">=16.8.0",
+    "typescript": "^3.5.1",
+    "uglify-js": "^3.6.0"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  }
+}
