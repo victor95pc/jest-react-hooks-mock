@@ -65,3 +65,5 @@ lib/
 
 # tsconfig generated file
 tsconfig.tsbuildinfo
+
+.npmrc

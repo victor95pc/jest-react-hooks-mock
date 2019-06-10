@@ -1,5 +1,5 @@
 # What its?
-Finally a simple solution to access the states and setters inside your react hook components
+Finally a simple solution to access the states and dispatchers inside your react hook components
 without the need to change any line in your components. :relaxed:
 
 # Install
@@ -15,12 +15,12 @@ import mockStates from 'jest-react-hooks-mock';
 ```
 To make it works you need to setup two options and the last argument will be a callback:
 
-| Option  | Type  | Description  | Example |
-| ------------: | ------------ | | ------------ | | ------------ |
-| component | Function | Need to be a valid react hook function  | YourComponent |
+| Option        | Type         | Description                             | Example      |
+| ------------: | ------------ | ------------                            | ------------ |
+| component     | Function     | Need to be a valid react hook function  | YourComponent |
 | states  | Array[string] | Here you define the names of all ```useState``` inside your component, **the order here is super important!**   | [ 'state1', 'state2' ] |
 
-###Example
+### Example
 ```js
 import mockStates from 'jest-react-hooks-mock';
 
@@ -45,7 +45,7 @@ describe('Test', () => {
       // render components always inside the callback!
       shallow(<YOUR_COMPONENT />)
 
-      // You can call the setters in the callback, it will also trigger the component to rerender
+      // You can call the dispatchers in the callback, it will also trigger the component to rerender
       setTestState('change')
 
       // states are saved in the "states" field on your Component, so now you read them
