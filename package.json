@@ -11,7 +11,8 @@
     "build:compress": "node_modules/uglify-js/bin/uglifyjs -c -m -o ./lib/index.js -- ./lib/index.js",
     "build": "npm run clean && npm run build:js",
     "prepublish": "npm run build",
-    "test:coverage": "npm test -- --coverage && cat ./coverage/lcov.info | coveralls"
+    "test:coverage": "npm test -- --coverage",
+    "coveralls": "npm run test:coverage && cat ./coverage/lcov.info | coveralls"
   },
   "files": [
     "lib"

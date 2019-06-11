@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/victor95pc/jest-react-hooks-mock/badge.svg?branch=master)](https://coveralls.io/github/victor95pc/jest-react-hooks-mock?branch=master)
+
 # What its?
 Finally a simple solution to access the states and dispatchers inside your react hook components
 without the need to change any line in your components, making testing simple and easy to make, just like using Classes. :relaxed:
