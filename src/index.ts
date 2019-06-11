@@ -6,13 +6,13 @@ type Dispatchers = Dispatcher[];
 type TPromise = Promise<[StateValues, Dispatchers]>;
 type MockImplementation = [any, Dispatcher];
 
-// declare global {
-//   const __jestReactHooksMockSpy: jest.SpyInstance
-// }
-
 declare const global: { __jestReactHooksMockSpy: jest.SpyInstance };
 
 const reactHookStateMock = (states: string[]): TPromise => {
+  if (global.__jestReactHooksMockSpy) {
+    global.__jestReactHooksMockSpy.mockRestore();
+  }
+  
   const originalUseState = useState;
 
   let stateIndex = 0;
@@ -26,10 +26,6 @@ const reactHookStateMock = (states: string[]): TPromise => {
       mockedSets[_stateIndex](value);
     };
   };
-
-  if (global.__jestReactHooksMockSpy) {
-    global.__jestReactHooksMockSpy.mockRestore();
-  }
 
   return new Promise(resolve => {
     global.__jestReactHooksMockSpy = jest.spyOn(React, 'useState').mockImplementation(function (): MockImplementation {
