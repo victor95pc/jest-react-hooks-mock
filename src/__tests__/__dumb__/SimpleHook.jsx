@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-export const DEFAULT_PROP_VALUE = 'hi';
+export const DEFAULT_STATE_VALUE = 'hi';
 
 export default function SimpleHook() {
-  let [state1, setState1] = useState(DEFAULT_PROP_VALUE);
+  let [state1] = useState(DEFAULT_STATE_VALUE);
 
   return <a>{state1}</a>
 }
