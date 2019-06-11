@@ -1,4 +1,5 @@
 [![Coverage Status](https://coveralls.io/repos/github/victor95pc/jest-react-hooks-mock/badge.svg?branch=master)](https://coveralls.io/github/victor95pc/jest-react-hooks-mock?branch=master)
+[![DeepScan grade](https://deepscan.io/api/teams/4042/projects/5844/branches/46640/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=4042&pid=5844&bid=46640)
 
 # What its?
 Finally a simple solution to access the states and dispatchers inside your react hook components
