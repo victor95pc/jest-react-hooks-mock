@@ -1,28 +1,25 @@
-import React, { useState, Dispatch, Component } from 'react';
+import React, { useState } from 'react';
 
-interface IComponent extends Component {
-  states: { [k: string]: any };
-}
-
-interface IOptions {
-  component: IComponent;
-  states: string[];
-}
-
-type Dispatcher = Dispatch<any>;
+type StateValues = { [k: string]: any };
+type Dispatcher = React.Dispatch<any>;
 type Dispatchers = Dispatcher[];
-type Callback = (dispatchers: Dispatchers) => void;
+type TPromise = Promise<[StateValues, Dispatchers]>;
 type MockImplementation = [any, Dispatcher];
 
-const reactHookStateMock = ({ component, states }: IOptions, callback: Callback): void => {
+// declare global {
+//   const __jestReactHooksMockSpy: jest.SpyInstance
+// }
+
+declare const global: { __jestReactHooksMockSpy: jest.SpyInstance };
+
+const reactHookStateMock = (states: string[]): TPromise => {
   const originalUseState = useState;
 
   let stateIndex = 0;
   let mockedSets: Dispatchers = [];
   let mockedSetsTest: Dispatchers = [];
   let mocksCreated = false;
-
-  component.states = {};
+  let stateValues: StateValues = {};
 
   const createGetterCurrentMockedSets = (_stateIndex: number): ((value: any) => void) => {
     return (value: any): void => {
@@ -30,41 +27,43 @@ const reactHookStateMock = ({ component, states }: IOptions, callback: Callback)
     };
   };
 
-  // @ts-ignore
-  const spy = jest.spyOn(React, 'useState').mockImplementation(function(): MockImplementation {
-    const [value, set] = originalUseState(arguments[0]);
+  if (global.__jestReactHooksMockSpy) {
+    global.__jestReactHooksMockSpy.mockRestore();
+  }
 
-    const fieldName = states[stateIndex];
+  return new Promise(resolve => {
+    global.__jestReactHooksMockSpy = jest.spyOn(React, 'useState').mockImplementation(function (): MockImplementation {
+      const [value, set] = originalUseState(arguments[0]);
 
-    component.states[fieldName] = value;
+      const fieldName = states[stateIndex];
 
-    const mockedSet: Dispatcher = (newValue): void => {
-      component.states[fieldName] = newValue;
-      set(newValue);
-    };
+      stateValues[fieldName] = value;
 
-    mockedSets.push(mockedSet);
+      const mockedSet: Dispatcher = (newValue): void => {
+        stateValues[fieldName] = newValue;
+        set(newValue);
+      };
 
-    if (!mocksCreated) {
-      mockedSetsTest.push(createGetterCurrentMockedSets(stateIndex));
-    }
-
-    stateIndex += 1;
-
-    if (stateIndex === states.length) {
-      stateIndex = 0;
+      mockedSets.push(mockedSet);
 
       if (!mocksCreated) {
-        callback(mockedSetsTest);
-        spy.mockRestore();
-        mockedSets = [];
-        mockedSetsTest = [];
+        mockedSetsTest.push(createGetterCurrentMockedSets(stateIndex));
       }
 
-      mocksCreated = true;
-    }
+      stateIndex += 1;
 
-    return [value, mockedSet];
+      if (stateIndex === states.length) {
+        stateIndex = 0;
+
+        if (!mocksCreated) {
+          resolve([stateValues, mockedSetsTest]);
+        }
+
+        mocksCreated = true;
+      }
+
+      return [value, mockedSet];
+    });
   });
 };
 

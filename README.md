@@ -1,6 +1,6 @@
 # What its?
 Finally a simple solution to access the states and dispatchers inside your react hook components
-without the need to change any line in your components. :relaxed:
+without the need to change any line in your components, making testing simple and easy to make, just like using Classes. :relaxed:
 
 # Install
 
@@ -11,23 +11,22 @@ npm install jest-react-hooks-mock --save-dev
 
 In order to exposed the states inside your component first you import the library:
 ```js
-import mockStates from 'jest-react-hooks-mock';
+import setupMockStates from 'jest-react-hooks-mock';
 ```
-To make it works you need to setup two options and the last argument will be a callback:
+To make it works you need to setup one arguments:
 
-| Option        | Type         | Description                             | Example      |
+| Argument        | Type         | Description                             | Example      |
 | ------------: | ------------ | ------------                            | ------------ |
-| component     | Function     | Need to be a valid react hook function  | YourComponent |
 | states  | Array[string] | Here you define the names of all ```useState``` inside your component, **the order here is super important!**   | [ 'state1', 'state2' ] |
+
 
 ### Example
 ```js
-import mockStates from 'jest-react-hooks-mock';
+import setupMockStates from 'jest-react-hooks-mock';
 
-mockStates({ component: YOUR_COMPONENT, states: ['test'] }, ([setTestState]) => {
-  //Make all the component rendering inside the callback
-  //Inside the callback you can access your states by using YOUR_COMPONENT.states.
-}
+let promise = setupMockStates(['test']);
+//Make all the component rendering after setup the mock
+//You can only access states and dispatchers after the Promise is resolved
 ```
 
 ## Real World Example
@@ -35,22 +34,25 @@ mockStates({ component: YOUR_COMPONENT, states: ['test'] }, ([setTestState]) => 
 ```js
 import React from 'react';
 import { shallow } from 'enzyme';
-import mockStates from 'jest-react-hooks-mock';
+import setupMockStates from 'jest-react-hooks-mock';
 import YOUR_COMPONENT from '<YOUR_COMPONENT_PATH>';
 
 describe('Test', () => {
-  it('run it', () => {
+  it('run it', async () => {
     // states amount must be the same as the amount of useState you have in your Component
-    mockStates({ component: YOUR_COMPONENT, states: ['test'] }, ([setTestState]) => {
-      // render components always inside the callback!
-      shallow(<YOUR_COMPONENT />)
+    let promise = setupMockStates(['test']);
 
-      // You can call the dispatchers in the callback, it will also trigger the component to rerender
-      setTestState('change')
+    // render components always after setupMockStates 
+    shallow(<YOUR_COMPONENT />);
 
-      // states are saved in the "states" field on your Component, so now you read them
-      expect(YOUR_COMPONENT.states.test).toEqual('change')
-    });
+    // states and dispatchers will be avaible when the promise is resolved
+    let [states, [setTestState]] = await promise;
+
+    // You can call the dispatchers in the callback, it will also trigger the component to rerender
+    setTestState('change')
+
+    // here you can read your component states
+    expect(states.test).toEqual('change')
   });
 });
 ```
