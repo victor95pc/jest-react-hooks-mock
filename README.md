@@ -48,7 +48,7 @@ describe('Test', () => {
     // states and dispatchers will be avaible when the promise is resolved
     let [states, [setTestState]] = await promise;
 
-    // You can call the dispatchers in the callback, it will also trigger the component to rerender
+    // You can call the dispatchers, it will also trigger the component to rerender
     setTestState('change')
 
     // here you can read your component states
