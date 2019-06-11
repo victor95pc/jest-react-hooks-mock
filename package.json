@@ -4,13 +4,14 @@
   "description": "Finally a simple solution to mock react hooks state",
   "main": "lib/index.js",
   "scripts": {
-    "test": "node_modules/jest-cli/bin/jest.js ./src/__tests__",
+    "test": "node_modules/.bin/jest ./src/__tests__/*.test.*",
     "lint": "node_modules/eslint/bin/eslint.js ./src/*.ts",
     "clean": "rm -rf ./lib",
     "build:js": "node_modules/typescript/bin/tsc",
     "build:compress": "node_modules/uglify-js/bin/uglifyjs -c -m -o ./lib/index.js -- ./lib/index.js",
     "build": "npm run clean && npm run build:js",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "test:coverage": "npm test -- --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "files": [
     "lib"
@@ -58,6 +59,7 @@
     "babel-jest": "^24.8.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "core-js": "^2.6.5",
+    "coveralls": "^3.0.4",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^5.16.0",
